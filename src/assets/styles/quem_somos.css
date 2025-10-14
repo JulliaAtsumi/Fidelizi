@@ -1,0 +1,41 @@
+.contato-section {
+    padding: 3rem 1rem;
+    background: #f9fafc;
+    border-radius: 12px;
+    color: #203047;
+    text-align: center;
+  }
+
+  .contato-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #0a1931;
+  }
+
+  .contato-info {
+    margin-top: 1.5rem;
+    display: inline-block;
+    background: #fff;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: left;
+  }
+
+  .contato-info p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+  }
+
+  .contato-info a {
+    color: #0a75a3;
+    text-decoration: none;
+  }
+
+  .contato-info a:hover {
+    text-decoration: underline;
+  }
+
+  .about p {
+    text-align: justify;
+  }

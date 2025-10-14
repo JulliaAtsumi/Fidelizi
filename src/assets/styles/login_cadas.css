@@ -1,0 +1,55 @@
+/* =============================
+   LOGIN
+   ============================= */
+.tela-login, .tela-cadastro {
+  min-height: 76vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f6f8fb;
+}
+
+.caixa-login, .caixa-cadastro {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.caixa-login h2, .caixa-cadastro h2 {
+  color: #1e3a8a;
+  margin-bottom: 1rem;
+}
+
+.caixa-login form, .caixa-cadastro form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.caixa-login #crie-conta {
+  padding-top: 1cap;
+}
+
+.caixa-login input, .caixa-cadastro input {
+  padding: .7rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.botao-principal, .botao-principal:visited {
+    background: linear-gradient(90deg,#1e3a8a,#3fa0fc);
+    color:white;
+    padding: .6rem 1rem;
+    border-radius:8px;
+    text-decoration:none;
+    display:inline-block;
+    margin-right:.6rem;
+    font-weight:600;
+}
+
+.texto-menor { color:#475b72; font-size:0.95rem; margin-bottom:.6rem;}
+.texto-menor a { color:#164ee9; font-size:0.95rem; margin-bottom:.6rem; text-decoration: none;}

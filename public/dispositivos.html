@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fidelizi — Dispositivos</title>
+  <link rel="icon" href="/src/assets/img/favicon.png" type="image/png">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link rel="stylesheet" href="/src/assets/styles/style.css" />
+</head>
+<body>
+
+  <!-- header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img src="/src/assets/img/logo_horizontal.png" alt="Logo" class="brand-logo">
+      </a>
+
+      <input type="checkbox" id="nav-toggle-2" class="nav-toggle">
+      <label for="nav-toggle-2" class="nav-toggle-label"><span></span></label>
+
+      <nav class="site-nav">
+        <a href="index.html">Início</a>
+        <a href="dispositivos.html">Dispositivos</a>
+        <a href="testes.html">Criar Teste</a>
+        <a href="quem_somos.html">Quem Somos</a>
+        <a href="#contato">Contato</a>
+        <a href="login.html" class="btn-outline">Entrar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container main-content">
+          <section class="devices">
+      <h2 class="section-title">Dispositivos Suportados</h2>
+      <div class="device-list">
+        <article class="device-detail">
+          <div class="device-info">
+            <h3>ESP32-CAM</h3>
+            <p>Microcontrolador com câmera — usado em testes de transmissão, autenticação e armazenamento de vídeo.</p>
+            <ul>
+              <li>Conectividade: Wi-Fi</li>
+              <li>Protocolos: HTTP, MQTT</li>
+              <li>Riscos comuns: credenciais fracas, firmware não assinado</li>
+            </ul>
+          </div>
+        </article>
+      <div class="device-grid1">
+        <div class="device-card1">
+          <img src="/src/assets/img/ESP32.1.png" alt="ESP32.1">
+        </div>
+        <div class="device-card1">
+          <img src="/src/assets/img/ESP32.2.png" alt="ESP32.2">
+        </div>
+      </div>
+    </section>
+    <br>
+        <article class="device-detail">
+          <div class="device-info">
+            <h3>Raspberry Pi Zero W</h3>
+            <p>Plataforma Linux leve para serviços locais, gateways e protótipos — bom para testes de integração e containers.</p>
+            <ul>
+              <li>Conectividade: Wi-Fi, USB</li>
+              <li>Protocolos: SSH, HTTP, MQTT</li>
+              <li>Riscos comuns: portas abertas, credenciais padrão</li>
+            </ul>
+            <div class="device-grid1">
+        <div class="device-card1">
+          <img src="/src/assets/img/raspberry.1.jpg" alt="raspberry.1">
+        </div>
+        <div class="device-card1">
+          <img src="/src/assets/img/raspberry.2.jpg" alt="raspberry.2">
+        </div>
+      </div>
+          </div>
+        </article>
+        <br>
+
+        <article class="device-detail">
+          <div class="device-info">
+            <h3>Sensor DHT22</h3>
+            <p>Sensor de temperatura/umidade. Ótimo para demonstrações de telemetria, autenticação e segurança dos dados sensoriais.</p>
+            <ul>
+              <li>Conectividade: Serial / GPIO</li>
+              <li>Riscos comuns: falta de criptografia em links, ausência de autenticação</li>
+            </ul>
+             <div class="device-grid1">
+        <div class="device-card1">
+          <img src="/src/assets/img/sensor.1.jpg" alt="sensor.1">
+        </div>
+        <div class="device-card1">
+          <img src="/src/assets/img/sensor.2.jpg" alt="sensor.2">
+        </div>
+      </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <p>© Fidelizi • Segurança em Dispositivos IoT.</p>
+      </div>
+      <div class="footer-right">
+        <nav class="footer-nav">
+          <a href="index.html">Início</a>
+          <a href="dispositivos.html">Dispositivo</a>
+          <a href="testes.html">Testes</a>
+          <a href="quem_somos.html">Quem Somos</a>
+        </nav>
+      </div>
+    </div>
+    <div class="container   footer-team">
+      <div class="footer-team">
+        <p>Desenvolvido por<a href="team_dev.html">Jullia Akutagawa</a>  e<a href="team_dev.html">Mª Eduarda Leão</a></p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

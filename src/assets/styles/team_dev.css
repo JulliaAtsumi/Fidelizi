@@ -1,0 +1,74 @@
+/* =============================
+   DESENVOLVEDORES (VERSÃO FINAL)
+   ============================= */
+.secao-desenvolvedores {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.grade-equipe {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding-top: 5rem;
+}
+
+.cartao-desenvolvedor {
+  background: #fff;
+  border-radius: 12px;
+  padding: 3rem 1.5rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: relative;
+  text-align: center;
+}
+
+.imagem-desenvolvedor {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.imagem-desenvolvedor img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+
+.conteudo-desenvolvedor {
+  margin-top: 60px;
+}
+.conteudo-desenvolvedor h3 {
+  color: #1e3a8a;
+  margin-bottom: .5rem;
+}
+.conteudo-desenvolvedor p {
+  text-align: justify;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+.botoes-desenvolvedor {
+  display: flex;
+  justify-content: center;
+  gap: .8rem;
+}
+.botoes-desenvolvedor a {
+  text-decoration: none;
+  padding: .6rem 1rem;
+  border-radius: 6px;
+  font-size: .9rem;
+  transition: background .3s ease;
+}
+.botao-github {
+  background: #24292f;
+  color: #fff;
+}
+.botao-github:hover { background: #444c56; }
+.botao-linkedin {
+  background: #0a66c2;
+  color: #fff;
+}
+.botao-linkedin:hover { background: #004182; }
