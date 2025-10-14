@@ -1,0 +1,101 @@
+/* =============================
+   LOGIN
+   ============================= */
+.tela-login, .tela-cadastro {
+  min-height: 68vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f6f8fb;
+}
+
+.caixa-login, .caixa-cadastro {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.caixa-login h2, .caixa-cadastro h2 {
+  color: #1e3a8a;
+  margin-bottom: 1rem;
+}
+
+.caixa-login form, .caixa-cadastro form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.caixa-login input, .caixa-cadastro input {
+  padding: .7rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.botao-principal, .botao-principal:visited {
+    background: linear-gradient(90deg,#1e3a8a,#3fa0fc);
+    color:white;
+    padding: .6rem 1rem;
+    border-radius:8px;
+    text-decoration:none;
+    display:inline-block;
+    margin-right:.6rem;
+    font-weight:600;
+}
+
+.texto-menor { color:#475b72; font-size:0.95rem; margin-bottom:.6rem;}
+.texto-menor a { color:#164ee9; font-size:0.95rem; margin-bottom:.6rem; text-decoration: none;}
+
+/* =============================
+   TOGGLE PESSOA FÍSICA / JURÍDICA
+   ============================= */
+.alternar-tipo {
+  position: relative;
+  display: flex;
+  background: #eef6ff;
+  border-radius: 30px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.alternar-tipo input { display: none; }
+
+.alternar-tipo label {
+  flex: 1;
+  text-align: center;
+  padding: .6rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  color: #1e3a8a;
+  z-index: 2;
+}
+
+.alternar-tipo .deslizante {
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%;
+  height: 100%;
+  background: #1e3a8a;
+  border-radius: 30px;
+  transition: .3s;
+  z-index: 1;
+}
+
+/* mover deslizante */
+#pf:checked ~ label[for="pf"],
+#pj:checked ~ label[for="pj"] {
+  color: #fff;
+}
+
+#pj:checked ~ .deslizante {
+  left: 50%;
+}
+
+/* Mostrar/ocultar formulários */
+.formulario { display: none; flex-direction: column; gap: 1rem; }
+#pf:checked ~ .formulario.pf { display: flex; }
+#pj:checked ~ .formulario.pj { display: flex; }
