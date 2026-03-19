@@ -8,20 +8,6 @@ Esta versão inclui melhorias significativas de segurança, organização de có
 
 ---
 
-## 📋 Sumário
-
-- [✅ Problemas Resolvidos](#-problemas-resolvidos)
-- [🏗️ Arquitetura](#️-arquitetura)
-- [🔧 Instalação](#-instalação)
-- [🔐 Segurança](#-segurança)
-- [📁 Estrutura de Arquivos](#-estrutura-de-arquivos)
-- [🚀 Como Usar](#-como-usar)
-- [🛠️ Desenvolvimento](#️-desenvolvimento)
-- [📝 API](#-api)
-- [🧪 Testes](#-testes)
-
----
-
 ## ✅ Problemas Resolvidos
 
 ### 🔐 **Autenticação**
