@@ -41,7 +41,8 @@
 }
 
 .botao-principal, .botao-principal:visited {
-    background: linear-gradient(90deg,#1e3a8a,#3fa0fc);
+    background: linear-gradient(90deg,#1e3a8a,#4fbb54);
+    border: none;
     color:white;
     padding: .6rem 1rem;
     border-radius:8px;
@@ -51,5 +52,80 @@
     font-weight:600;
 }
 
+.botao-pessoa, .botao-pessoa:visited {
+    background: linear-gradient(90deg,#1e3a8a,#4fbb54);
+    border: none;
+    color:white;
+    padding: .6rem 1rem;
+    border-radius:8px;
+    text-decoration:none;
+    display:inline-block;
+    margin-right:.6rem;
+    font-weight:600;
+    height: 35px;
+    width: 12rem;
+}
+
+.botao-pessoa img {
+  width: 25px;
+}
+
 .texto-menor { color:#475b72; font-size:0.95rem; margin-bottom:.6rem;}
 .texto-menor a { color:#164ee9; font-size:0.95rem; margin-bottom:.6rem; text-decoration: none;}
+
+/* Estilos para a página de seleção de tipo */
+.texto-selecao {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #666;
+}
+
+.botao-tipo-cadastro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 60px;
+    padding: 2rem;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #000000;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.botao-tipo-cadastro:hover {
+    border-color:#1e3a8a;
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    text-decoration: none;
+    color: #000000;
+}
+
+.botao-conteudo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.botao-conteudo div {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.botao-conteudo img {
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+}
+
+.voltar-login, .voltar-cadastro {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.voltar-cadastro a, .voltar-login a {
+    color: #007bff;
+    text-decoration: none;
+}

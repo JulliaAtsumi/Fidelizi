@@ -1,170 +1,346 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Fidelizi — Testes</title>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <!-- jsPDF para exportação -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <link rel="icon" href="/src/assets/img/favicon.png" type="image/png">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/src/assets/styles/style.css" />
+  <link rel="stylesheet" href="/src/assets/styles/teste.css">
 </head>
+
 <body>
 
-  <!-- header -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html">
-        <img src="/src/assets/img/logo_horizontal.png" alt="Logo" class="brand-logo">
-      </a>
 
-      <input type="checkbox" id="nav-toggle-3" class="nav-toggle">
-      <label for="nav-toggle-3" class="nav-toggle-label"><span></span></label>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar collapsed" id="sidebar">
+      <div class="sidebar-header">
+        <img src="/src/assets/img/logo_horizontal_ModoEscuro.png" alt="Fidelizi" class="sidebar-logo">
+      </div>
 
-      <nav class="site-nav">
-        <a href="index.html">Início</a>
-        <a href="dispositivos.html">Dispositivos</a>
-        <a href="testes.html">Criar Teste</a>
-        <a href="quem_somos.html">Quem Somos</a>
-        <a href="#contato">Contato</a>
-        <a href="login.html" class="btn-outline">Entrar</a>
+      <nav class="sidebar-nav">
+        <div class="nav-item">
+          <a href="home.html" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Início</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="#servicos-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+            <i class="fas fa-cogs"></i>
+            <span>Serviços</span>
+            <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+          </a>
+          <div class="collapse submenu" id="servicos-submenu">
+            <a href="dispositivos.html" class="nav-link">Dispositivos</a>
+            <a href="testes.html" class="nav-link active">Testes</a>
+          </div>
+        </div>
+        
+        <div class="nav-item">
+          <a href="quem_somos.html" class="nav-link">
+            <i class="fas fa-users"></i>
+            <span>Quem Somos</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="#config-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+            <i class="fas fa-cog"></i>
+            <span>Configurações</span>
+            <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+          </a>
+          <div class="collapse submenu" id="config-submenu">
+            <a href="#" class="nav-link" id="dark-mode-toggle">
+              <i class="fas fa-moon"></i>
+              <span>Modo Escuro</span>
+            </a>
+            <a href="perfil.html" class="nav-link">
+              <i class="fas fa-user"></i>
+              <span>Meu Perfil</span>
+            </a>
+          </div>
+        </div>
+        
+        <div class="nav-item">
+          <a href="index.html" class="nav-link" id="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Sair</span>
+          </a>
+        </div>
       </nav>
-    </div>
-  </header>
+    </aside>
 
-  <main class="container main-content">
-    <h2 class="section-title">Testes</h2>
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <button class="menu-toggle" id="menu-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
 
-    <div class="row">
-      <div class="col-lg-6">
-        <p>Crie um teste visual.</p>
-
-        <form class="test-form" id="testForm">
-          <div class="form-group">
-            <label>Nome do teste</label>
-            <input type="text" placeholder="Ex.: Stress MQTT - Câmera" required>
-          </div>
-
-          <div class="form-group">
-            <label>Dispositivo</label>
-            <select id="selectDispositivo" required>
-              <option value="">Selecione</option>
-              <option>ESP32-CAM</option>
-              <option>Raspberry Pi Zero W</option>
-              <option>DHT22</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Tipo de teste</label>
-            <select id="selectTipo" required>
-              <option value="">Selecione</option>
-              <option>Penetração (Network)</option>
-              <option>Análise de Firmware</option>
-              <option>Stress / DoS</option>
-              <option>SAST / DAST</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Descrição</label>
-            <textarea rows="4" placeholder="Objetivo do teste, parâmetros e observações" required></textarea>
-          </div>
-
-          <div class="form-actions">
-            <button class="btn-primary" type="submit">Salvar Teste</button>
-            <button class="btn-ghost" type="reset">Limpar</button>
-          </div>
-        </form>
-
-        <!-- Mensagem de sucesso -->
-        <div id="mensagem-sucesso" style="display:none; margin-top:10px; color:green;">
-          Teste cadastrado com sucesso!
+        <div class="header-center">
+          <img src="/src/assets/img/logo_horizontal.png" alt="Fidelizi" class="header-logo">
         </div>
 
+        <div class="search-container">
+          <input type="text" id="search" placeholder="Buscar no site..." />
+          <button onclick="buscar()"><i class="fas fa-search"></i></button>
+        </div>
+      </header>
+
+      <div class="main-content-inner">
+        <main class="container">
+          <h2 class="section-title">Gerenciar Testes</h2>
+          <p class="mb-4">Crie e gerencie testes de segurança para dispositivos IoT.</p>
+
+          <!-- Formulário de Testes -->
+          <div class="crud-container">
+            <div class="form-section">
+              <h4 id="form-title">Novo Teste</h4>
+
+              <form id="test-form">
+                <input type="hidden" id="test-id">
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="test-name">Nome do Teste *</label>
+                      <input type="text" class="form-control" id="test-name" placeholder="Ex.: Stress MQTT - Câmera"
+                        required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="test-device">Dispositivo *</label>
+                      <select class="form-control" id="test-device" required>
+                        <option value="">Selecione...</option>
+                        <option value="ESP32-CAM">ESP32-CAM</option>
+                        <option value="Raspberry Pi Zero W">Raspberry Pi Zero W</option>
+                        <option value="DHT22">Sensor DHT22</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="test-type">Tipo de Teste *</label>
+                      <select class="form-control" id="test-type" required>
+                        <option value="">Selecione...</option>
+                        <option value="Penetração (Network)">Penetração (Network)</option>
+                        <option value="Análise de Firmware">Análise de Firmware</option>
+                        <option value="Stress / DoS">Stress / DoS</option>
+                        <option value="SAST / DAST">SAST / DAST</option>
+                        <option value="Configuração de Segurança">Configuração de Segurança</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="test-status">Status *</label>
+                      <select class="form-control" id="test-status" required>
+                        <option value="pendente">Pendente</option>
+                        <option value="andamento">Em Andamento</option>
+                        <option value="concluido">Concluído</option>
+                        <option value="falha">Falha</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="test-severity">Severidade</label>
+                      <select class="form-control" id="test-severity">
+                        <option value="">Nenhuma</option>
+                        <option value="baixa">Baixa</option>
+                        <option value="media">Média</option>
+                        <option value="alta">Alta</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="test-vulnerabilities">Vulnerabilidades Encontradas</label>
+                      <input type="number" class="form-control" id="test-vulnerabilities" min="0" value="0">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="test-priority">Prioridade</label>
+                      <select class="form-control" id="test-priority">
+                        <option value="baixa">Baixa</option>
+                        <option value="media" selected>Média</option>
+                        <option value="alta">Alta</option>
+                        <option value="urgente">Urgente</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="test-severity">Severidade</label>
+                      <select class="form-control" id="test-severity">
+                        <option value="">Nenhuma</option>
+                        <option value="baixa">Baixa</option>
+                        <option value="media">Média</option>
+                        <option value="alta">Alta</option>
+                        <option value="critica">Crítica</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="test-description">Descrição *</label>
+                  <textarea class="form-control" id="test-description" rows="4"
+                    placeholder="Objetivo do teste, parâmetros e observações" required></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="test-observations">Observações</label>
+                  <textarea class="form-control" id="test-observations" rows="3"
+                    placeholder="Observações adicionais..."></textarea>
+                </div>
+
+                <div class="form-actions mt-3">
+                  <button type="submit" class="btn-primary">Salvar Teste</button>
+                  <button type="button" class="btn-cancelar" onclick="resetForm()">Cancelar</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Pesquisa -->
+            <div class="search-container">
+              <div class="row">
+                <div class="col-md-4">
+                  <input type="text" id="search-tests" class="form-control" placeholder="Pesquisar testes...">
+                </div>
+                <div class="col-md-3">
+                  <select id="filter-device" class="form-control">
+                    <option value="">Todos os dispositivos</option>
+                    <option value="ESP32-CAM">ESP32-CAM</option>
+                    <option value="Raspberry Pi Zero W">Raspberry Pi Zero W</option>
+                    <option value="DHT22">Sensor DHT22</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select id="filter-status" class="form-control">
+                    <option value="">Todos os status</option>
+                    <option value="pendente">Pendente</option>
+                    <option value="andamento">Em Andamento</option>
+                    <option value="concluido">Concluído</option>
+                    <option value="falha">Falha</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn-primary w-100" onclick="searchTests()">Pesquisar</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Grid de Testes -->
+            <div class="grid-container">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Nome do Teste</th>
+                      <th>Dispositivo</th>
+                      <th>Tipo</th>
+                      <th>Status</th>
+                      <th>Vulnerabilidades</th>
+                      <th>Severidade</th>
+                      <th>Data</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tests-table-body">
+                    <!-- Dados serão carregados via JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Paginação -->
+              <div class="pagination-container">
+                <div class="records-per-page">
+                  <span>Registros por página:</span>
+                  <select id="records-per-page" onchange="changeRecordsPerPage()">
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="150">150</option>
+                  </select>
+                </div>
+
+                <div id="pagination-controls">
+                  <!-- Controles de paginação serão gerados via JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
 
-      <div class="col-lg-6">
-        <h4>Testes Cadastrados</h4>
-        <ul class="test-list">
-          <li>
-            <strong>Stress MQTT</strong>
-            <span class="muted">• ESP32-CAM • 12-09-2025</span>
-            <p class="small">Teste de resistência do broker e do dispositivo com mensagens por segundo crescentes.</p>
-          </li>
-          <li>
-            <strong>Firmware Audit</strong>
-            <span class="muted">• Raspberry Pi Zero W • 28-07-2025</span>
-            <p class="small">Revisão estática do firmware e dependências.</p>
-          </li>
-        </ul>
-      </div>
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <div class="footer-left">
+            <p>© Fidelizi • Segurança em Dispositivos IoT.</p>
+          </div>
+          <div class="footer-right">
+            <nav class="footer-nav">
+              <a href="index.html">Início</a>
+              <a href="dispositivos.html">Dispositivo</a>
+              <a href="testes.html">Testes</a>
+              <a href="quem_somos.html">Quem Somos</a>
+            </nav>
+          </div>
+        </div>
+        <div class="container footer-team">
+          <div class="footer-team">
+            <p>Desenvolvido por<a href="team_dev.html">Jullia Akutagawa</a> e<a href="team_dev.html">Mª Eduarda Leão</a>
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
+  </div>
 
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-left">
-        <p>© Fidelizi • Segurança em Dispositivos IoT.</p>
-      </div>
-      <div class="footer-right">
-        <nav class="footer-nav">
-          <a href="index.html">Início</a>
-          <a href="dispositivos.html">Dispositivo</a>
-          <a href="testes.html">Testes</a>
-          <a href="quem_somos.html">Quem Somos</a>
-        </nav>
-      </div>
-    </div>
-    <div class="container   footer-team">
-      <div class="footer-team">
-        <p>Desenvolvido por<a href="team_dev.html">Jullia Akutagawa</a>  e<a href="team_dev.html">Mª Eduarda Leão</a></p>
-      </div>
-    </div>
-  </footer>
-
-<script>
-// Captura o formulário e a lista de testes
-const form = document.getElementById('testForm');
-const testList = document.querySelector('.test-list');
-const mensagemSucesso = document.getElementById('mensagem-sucesso');
-
-form.addEventListener('submit', function(event) {
-  event.preventDefault(); // impede recarregar a página
-
-  // Pegar valores do formulário
-  const nome = form.querySelector('input[type="text"]').value;
-  const dispositivo = document.getElementById('selectDispositivo').value;
-  const tipo = document.getElementById('selectTipo').value;
-  const descricao = form.querySelector('textarea').value;
-
-  // Criar a data atual
-  const hoje = new Date();
-  const dataFormatada = hoje.toLocaleDateString('pt-BR');
-
-  // Criar novo item da lista
-  const li = document.createElement('li');
-  li.innerHTML = `
-    <strong>${nome}</strong>
-    <span class="muted">• ${dispositivo} • ${dataFormatada}</span>
-    <p class="small">${descricao}</p>
-  `;
-
-  // Adicionar à lista
-  testList.appendChild(li);
-
-  // Limpar o formulário
-  form.reset();
-
-  // Mostrar mensagem de sucesso por 3 segundos
-  mensagemSucesso.style.display = 'block';
-  setTimeout(() => {
-    mensagemSucesso.style.display = 'none';
-  }, 3000);
-});
-</script>
-
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  
+  <!-- Configuração do Firebase -->
+  <script src="js/firebase/firebase-config.js"></script>
+  <script src="js/firebase/firebase-services.js"></script>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Funcionalidades Comuns Usuário -->
+  <script src="js/user-common.js"></script>
+  <script src="js/teste.js"></script>
 </body>
+
 </html>

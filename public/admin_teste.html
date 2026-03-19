@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fidelizi — Gerenciar Testes</title>
+  <link rel="icon" href="/src/assets/img/favicon.png" type="image/png">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <!-- jsPDF para exportação -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link rel="stylesheet" href="/src/assets/styles/style.css" />
+  <link rel="stylesheet" href="/src/assets/styles/admin_dashboard.css">
+  <style>
+    .hidden {
+      display: none !important;
+    }
+
+    .test-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #1e3a8a;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .badge-pendente {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .badge-andamento {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .badge-concluido {
+      background: #10b981;
+      color: white;
+    }
+
+    .badge-falha {
+      background: #ef4444;
+      color: white;
+    }
+
+    .badge-baixa {
+      background: #6b7280;
+      color: white;
+    }
+
+    .badge-media {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .badge-alta {
+      background: #ef4444;
+      color: white;
+    }
+
+    .badge-critica {
+      background: #991b1b;
+      color: white;
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+    }
+
+    .btn-success {
+      background: #10b981;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+    }
+
+    .btn-warning {
+      background: #f59e0b;
+    }
+
+    .btn-info {
+      background: #0ea5e9;
+    }
+
+    .pagination-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .alert-danger {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .alert-info {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #93c5fd;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .form-section {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(28,44,70,0.08);
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      color: #1e3a8a;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .grid-section {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(28,44,70,0.08);
+      overflow: hidden;
+    }
+
+    .crud-container {
+      padding: 2rem;
+      flex: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Admin Padronizado -->
+    <aside class="sidebar" id="sidebar" style="transform: translateX(0);">
+      <div class="sidebar-header">
+        <img src="/src/assets/img/logo_horizontal_ModoEscuro.png" alt="Fidelizi" class="sidebar-logo">
+        <div class="admin-badge"><i class="fas fa-shield-alt me-2"></i>ADMIN</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-item">
+          <a href="admin_dashboard.html" class="nav-link" data-page="dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </div>
+
+        <div class="nav-item">
+          <a href="#admin-cadastros-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+            <i class="fas fa-database"></i>
+            <span>Cadastros</span>
+            <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+          </a>
+          <div class="collapse submenu" id="admin-cadastros-submenu">
+            <a href="gerenciar_usuarios.html" class="nav-link" data-page="usuarios">Gerenciar Usuários</a>
+            <a href="novo_usuario.html" class="nav-link" data-page="novo-usuario">Novo Usuário</a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <a href="#admin-testes-submenu" class="nav-link active" data-bs-toggle="collapse" aria-expanded="true">
+            <i class="fas fa-vial"></i>
+            <span>Testes</span>
+            <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+          </a>
+          <div class="collapse submenu show" id="admin-testes-submenu">
+            <a href="admin_teste.html" class="nav-link active" data-page="testes">Gerenciar Testes</a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <a href="relatorios.html" class="nav-link" data-page="relatorios">
+            <i class="fas fa-chart-bar"></i>
+            <span>Relatórios</span>
+          </a>
+        </div>
+
+        <div class="nav-item">
+          <a href="#admin-config-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+            <i class="fas fa-cog"></i>
+            <span>Configurações</span>
+            <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+          </a>
+          <div class="collapse submenu" id="admin-config-submenu">
+            <a href="#" class="nav-link" id="dark-mode-toggle">
+              <i class="fas fa-moon"></i>
+              <span>Modo Escuro</span>
+            </a>
+            <a href="#" class="nav-link" onclick="alert('Página em desenvolvimento')">
+              <i class="fas fa-user"></i>
+              <span>Meu Perfil</span>
+            </a>
+            <a href="#" class="nav-link" onclick="alert('Página em desenvolvimento')">
+              <i class="fas fa-sliders-h"></i>
+              <span>Configurações do Sistema</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <a href="index.html" class="nav-link" id="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Sair</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <button class="menu-toggle" id="menu-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="header-center">
+          <img src="/src/assets/img/logo_horizontal.png" alt="Fidelizi" class="header-logo">
+          <span class="admin-badge ms-2">GERENCIAR TESTES</span>
+        </div>
+
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="showNewTestForm()">
+            <i class="fas fa-vial me-2"></i>Novo Teste
+          </button>
+          <button class="btn btn-success" onclick="exportAllTestsPDF()">
+            <i class="fas fa-file-pdf me-2"></i>Exportar PDF
+          </button>
+          <div class="search-container">
+            <input type="text" id="global-search" placeholder="Buscar no sistema..." />
+            <button onclick="performGlobalSearch(document.getElementById('global-search').value)"
+              style="background: none; border: none; color: #1e3a8a; cursor: pointer;">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="crud-container">
+        <!-- Alert Messages -->
+        <div id="alert-message" class="alert hidden"></div>
+
+        <!-- Form Section (Hidden by default) -->
+        <div class="form-section hidden" id="form-section">
+          <h3 class="section-title" id="form-title">
+            <i class="fas fa-vial me-2"></i>Novo Teste
+          </h3>
+
+          <form id="test-form">
+            <input type="hidden" id="test-id">
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="test-name" class="form-label">Nome do Teste *</label>
+                  <input type="text" class="form-control" id="test-name" placeholder="Ex: Teste de Penetração WiFi"
+                    required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="test-device" class="form-label">Dispositivo *</label>
+                  <select class="form-select" id="test-device" required>
+                    <option value="">Selecione o dispositivo...</option>
+                    <option value="ESP32-CAM">ESP32-CAM</option>
+                    <option value="Raspberry Pi Zero W">Raspberry Pi Zero W</option>
+                    <option value="Sensor DHT22">Sensor DHT22</option>
+                    <option value="Arduino Uno">Arduino Uno</option>
+                    <option value="NodeMCU">NodeMCU</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="test-type" class="form-label">Tipo de Teste *</label>
+                  <select class="form-select" id="test-type" required>
+                    <option value="">Selecione o tipo...</option>
+                    <option value="Penetração (Network)">Penetração (Network)</option>
+                    <option value="Análise de Firmware">Análise de Firmware</option>
+                    <option value="Stress / DoS">Stress / DoS</option>
+                    <option value="SAST / DAST">SAST / DAST</option>
+                    <option value="Configuração de Segurança">Configuração de Segurança</option>
+                    <option value="Auditoria de Código">Auditoria de Código</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="test-status" class="form-label">Status *</label>
+                  <select class="form-select" id="test-status" required>
+                    <option value="pendente">Pendente</option>
+                    <option value="andamento">Em Andamento</option>
+                    <option value="concluido">Concluído</option>
+                    <option value="falha">Falha</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="test-severity" class="form-label">Severidade</label>
+                  <select class="form-select" id="test-severity">
+                    <option value="">Nenhuma</option>
+                    <option value="baixa">Baixa</option>
+                    <option value="media">Média</option>
+                    <option value="alta">Alta</option>
+                    <option value="critica">Crítica</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="test-vulnerabilities" class="form-label">Vulnerabilidades</label>
+                  <input type="number" class="form-control" id="test-vulnerabilities" min="0" value="0">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="test-priority" class="form-label">Prioridade</label>
+                  <select class="form-select" id="test-priority">
+                    <option value="baixa">Baixa</option>
+                    <option value="media" selected>Média</option>
+                    <option value="alta">Alta</option>
+                    <option value="urgente">Urgente</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="test-description" class="form-label">Descrição *</label>
+              <textarea class="form-control" id="test-description" rows="4"
+                placeholder="Descreva o objetivo, parâmetros e observações do teste..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="test-observations" class="form-label">Observações</label>
+              <textarea class="form-control" id="test-observations" rows="3"
+                placeholder="Observações adicionais..."></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Salvar Teste
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="cancelForm()">
+                <i class="fas fa-times me-2"></i>Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Grid Section -->
+        <div class="grid-section">
+          <!-- Search and Filters -->
+          <div class="p-3 border-bottom">
+            <div class="row align-items-center">
+              <div class="col-md-3">
+                <input type="text" id="search-tests" class="form-control" placeholder="Pesquisar testes...">
+              </div>
+              <div class="col-md-2">
+                <select id="filter-device" class="form-select" onchange="searchTests()">
+                  <option value="">Todos dispositivos</option>
+                  <option value="ESP32-CAM">ESP32-CAM</option>
+                  <option value="Raspberry Pi Zero W">Raspberry Pi</option>
+                  <option value="Sensor DHT22">Sensor DHT22</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <select id="filter-status" class="form-select" onchange="searchTests()">
+                  <option value="">Todos status</option>
+                  <option value="pendente">Pendente</option>
+                  <option value="andamento">Em Andamento</option>
+                  <option value="concluido">Concluído</option>
+                  <option value="falha">Falha</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <select id="filter-severity" class="form-select" onchange="searchTests()">
+                  <option value="">Todas severidades</option>
+                  <option value="baixa">Baixa</option>
+                  <option value="media">Média</option>
+                  <option value="alta">Alta</option>
+                  <option value="critica">Crítica</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn-primary w-100" onclick="searchTests()">
+                  <i class="fas fa-filter me-2"></i>Filtrar
+                </button>
+              </div>
+              <div class="col-md-3 text-end">
+                <span class="text-muted" id="total-tests-count">0 teste(s)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tests Table -->
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th width="60">Icone</th>
+                  <th>Teste/Descrição</th>
+                  <th width="120">Dispositivo</th>
+                  <th width="120">Tipo</th>
+                  <th width="100">Status</th>
+                  <th width="100">Severidade</th>
+                  <th width="80">Vuln.</th>
+                  <th width="120">Data</th>
+                  <th width="180" class="text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tests-table-body">
+                <!-- Tests will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="pagination-container">
+            <div>
+              <span class="me-3">Registros por página:</span>
+              <select id="records-per-page" onchange="changeRecordsPerPage()" class="form-select d-inline-block w-auto">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+
+            <div id="pagination-controls">
+              <!-- Pagination will be loaded here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  
+  <!-- Configuração do Firebase -->
+  <script src="js/firebase/firebase-config.js"></script>
+  <script src="js/firebase/firebase-services.js"></script>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Funcionalidades Comuns Admin -->
+  <script src="js/admin-common.js"></script>
+  <script src="js/novo_teste.js"></script>
+  <script src="js/admin_teste.js"></script>
+  
+  <script>
+    // Atualizar item ativo do menu
+    document.addEventListener('DOMContentLoaded', function() {
+      updateActiveMenuItem('testes');
+      // Expandir submenu de testes
+      const submenu = document.getElementById('admin-testes-submenu');
+      if (submenu) {
+        submenu.classList.add('show');
+        const parentNav = submenu.previousElementSibling;
+        if (parentNav) {
+          parentNav.setAttribute('aria-expanded', 'true');
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+    .crud-container {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(28, 44, 70, 0.08);
+        margin-bottom: 2rem;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #eef6ff;
+    }
+
+    .grid-container {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(28, 44, 70, 0.08);
+    }
+
+    .table-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        padding: 0.4rem 0.8rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.8rem;
+    }
+
+    .btn-edit {
+        background: #eef6ff;
+        color: #1e3a8a;
+    }
+
+    .btn-delete {
+        background: #ffe8e8;
+        color: #d93025;
+    }
+
+    .btn-view {
+        background: #e6f7ee;
+        color: #07924a;
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: #f8fbff;
+        border-top: 1px solid #eef6ff;
+    }
+
+    .records-per-page {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .search-container {
+        margin-bottom: 1.5rem;
+    }
+
+    .status-badge {
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .status-pendente {
+        background: #fff4e8;
+        color: #b45b00;
+    }
+
+    .status-andamento {
+        background: #eef6ff;
+        color: #1e3a8a;
+    }
+
+    .status-concluido {
+        background: #e6f7ee;
+        color: #07924a;
+    }
+
+    .status-falha {
+        background: #ffe8e8;
+        color: #d93025;
+    }
+
+    .severity-high {
+        color: #d93025;
+        font-weight: 600;
+    }
+
+    .severity-medium {
+        color: #f9a825;
+        font-weight: 600;
+    }
+
+    .severity-low {
+        color: #07924a;
+        font-weight: 600;
+    }

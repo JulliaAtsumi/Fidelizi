@@ -1,0 +1,79 @@
+{
+  "name": "fidelizi-tcc",
+  "version": "2.0.0",
+  "description": "Sistema web de segurança e testes para dispositivos IoT - Trabalho de Conclusão de Curso",
+  "main": "public/index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Build process would be implemented with Vite/Webpack'",
+    "preview": "python -m http.server 8001",
+    "lint": "eslint public/js/**/*.js",
+    "lint:fix": "eslint public/js/**/*.js --fix",
+    "format": "prettier --write public/js/**/*.js",
+    "test": "echo 'Tests would be implemented with Jest'",
+    "validate": "npm run lint && npm run test"
+  },
+  "keywords": [
+    "iot",
+    "security",
+    "penetration-testing",
+    "vulnerability-assessment",
+    "firebase",
+    "tcc",
+    "web-security"
+  ],
+  "author": {
+    "name": "Fidelizi Team",
+    "email": "contato@fidelizi.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/fidelizi-tcc"
+  },
+  "dependencies": {
+    "firebase": "^12.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "@eslint/js": "^9.0.0",
+    "globals": "^15.0.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-console": "warn",
+      "no-unused-vars": "error",
+      "prefer-const": "error",
+      "no-var": "error"
+    },
+    "globals": {
+      "firebase": "readonly",
+      "auth": "readonly",
+      "db": "readonly"
+    }
+  },
+  "prettier": {
+    "semi": true,
+    "trailingComma": "es5",
+    "singleQuote": false,
+    "printWidth": 100,
+    "tabWidth": 4
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

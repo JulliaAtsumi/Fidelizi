@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Fidelizi — Equipe</title>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <!-- jsPDF para exportação -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <link rel="icon" href="/src/assets/img/favicon.png" type="image/png">
 
   <!-- Bootstrap CSS -->
@@ -15,97 +25,184 @@
   <link rel="stylesheet" href="/src/assets/styles/style.css" />
   <link rel="stylesheet" href="/src/assets/styles/team_dev.css">
 </head>
+
 <body>
 
-  <!-- HEADER / NAV (CSS-only menu usando checkbox) -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html">
-        <img src="/src/assets/img/logo_horizontal.png" alt="Logo" class="brand-logo">
-      </a>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar collapsed" id="sidebar">
+      <div class="sidebar-header">
+        <img src="/src/assets/img/logo_horizontal_ModoEscuro.png" alt="Fidelizi" class="sidebar-logo">
+      </div>
 
-      <input type="checkbox" id="nav-toggle" class="nav-toggle">
-      <label for="nav-toggle" class="nav-toggle-label">
-        <span></span>
-      </label>
-
-      <nav class="site-nav">
-        <a href="index.html">Início</a>
-        <a href="dispositivos.html">Dispositivos</a>
-        <a href="testes.html">Criar Teste</a>
-        <a href="quem_somos.html">Quem Somos</a>
-        <a href="#contato">Contato</a>
-        <a href="login.html" class="btn-outline">Entrar</a>
+      <nav class="sidebar-nav">
+        <div class="nav-item">
+          <a href="home.html" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Início</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="#servicos-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+            <i class="fas fa-cogs"></i>
+            <span>Serviços</span>
+            <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+          </a>
+          <div class="collapse submenu" id="servicos-submenu">
+            <a href="dispositivos.html" class="nav-link">Dispositivos</a>
+            <a href="testes.html" class="nav-link">Testes</a>
+            <a href="relatorios.html" class="nav-link">Relatórios</a>
+          </div>
+        </div>
+        
+        <div class="nav-item">
+          <a href="quem_somos.html" class="nav-link">
+            <i class="fas fa-users"></i>
+            <span>Quem Somos</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="#config-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+            <i class="fas fa-cog"></i>
+            <span>Configurações</span>
+            <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+          </a>
+          <div class="collapse submenu" id="config-submenu">
+            <a href="#" class="nav-link" id="dark-mode-toggle">
+              <i class="fas fa-moon"></i>
+              <span>Modo Escuro</span>
+            </a>
+            <a href="perfil.html" class="nav-link">
+              <i class="fas fa-user"></i>
+              <span>Meu Perfil</span>
+            </a>
+          </div>
+        </div>
+        
+        <div class="nav-item">
+          <a href="index.html" class="nav-link" id="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Sair</span>
+          </a>
+        </div>
       </nav>
-    </div>
-  </header>
+    </aside>
 
-  <main class="secao-desenvolvedores">
-    <h2 class="titulo-secao">Nosso Time</h2>
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <button class="menu-toggle" id="menu-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
 
-    <div class="grade-equipe">
-
-      <!-- Card 1 -->
-      <div class="cartao-desenvolvedor">
-        <div class="imagem-desenvolvedor">
-          <img src="/src/assets/img/MEduarda.png" alt="Foto do Desenvolvedor 1">
+        <div class="header-center">
+          <img src="/src/assets/img/logo_horizontal.png" alt="Fidelizi" class="header-logo">
         </div>
-        <div class="conteudo-desenvolvedor">
-          <h3>Maria Eduarda Leão</h3>
-          <p>Aluna da Fatec Garça, atualmente no 4º termo do curso de Análise e Desenvolvimento de Sistemas. 
-            Tenho interesse em tecnologia, inovação e no desenvolvimento de soluções que facilitem o dia a dia das pessoas.
-            Este espaço foi criado para compartilhar projetos e aprendizados, mostrando um pouco do que venho construindo 
-            durante o curso e minhas experiências na área de TI. Atualmente estou focada em design responsivo e interfaces 
-            modernas que priorizam a experiência do usuário.</p>
-          <div class="botoes-desenvolvedor">
-            <a href="https://github.com/marialleao" class="botao-github" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://www.linkedin.com/in/meduardamleao/" class="botao-linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        
+        <div class="search-container">
+          <input type="text" id="search" placeholder="Buscar no site..." />
+          <button onclick="buscar()"><i class="fas fa-search"></i></button>
+        </div>
+      </header>
+
+      <div class="main-content-inner">
+        <main class="secao-desenvolvedores">
+          <h2 class="titulo-secao">Nosso Time</h2>
+
+          <div class="grade-equipe">
+
+            <!-- Card 1 -->
+            <div class="cartao-desenvolvedor">
+              <div class="imagem-desenvolvedor">
+                <img src="/src/assets/img/MEduarda.png" alt="Foto do Desenvolvedor 1">
+              </div>
+              <div class="conteudo-desenvolvedor">
+                <h3>Maria Eduarda Leão</h3>
+                <p>Aluna da Fatec Garça, atualmente no 4º termo do curso de Análise e Desenvolvimento de Sistemas.
+                  Tenho interesse em tecnologia, inovação e no desenvolvimento de soluções que facilitem o dia a dia das
+                  pessoas.
+                  Este espaço foi criado para compartilhar projetos e aprendizados, mostrando um pouco do que venho
+                  construindo
+                  durante o curso e minhas experiências na área de TI. Atualmente estou focada em design responsivo e
+                  interfaces
+                  modernas que priorizam a experiência do usuário.</p>
+                <div class="botoes-desenvolvedor">
+                  <a href="https://github.com/marialleao" class="botao-github" target="_blank"
+                    rel="noopener noreferrer">GitHub</a>
+                  <a href="https://www.linkedin.com/in/meduardamleao/" class="botao-linkedin" target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="cartao-desenvolvedor">
+              <div class="imagem-desenvolvedor">
+                <img src="/src/assets/img/Jullia.png" alt="Foto do Desenvolvedor 2">
+              </div>
+              <div class="conteudo-desenvolvedor">
+                <h3>Jullia Akutagawa</h3>
+                <p>Sou aluna da Fatec Garça e também estou no 4º termo do curso de Análise e Desenvolvimento de
+                  Sistemas.
+                  Tenho grande interesse pela área de tecnologia e busco constantemente aprender novas ferramentas e
+                  conceitos
+                  que possam contribuir para o desenvolvimento de soluções inovadoras. Desenvolvedora Back-end,
+                  especialista em APIs,
+                  segurança e banco de dados, garantindo performance e confiabilidade.</p>
+                <div class="botoes-desenvolvedor">
+                  <a href="https://github.com/JulliaAtsumi" class="botao-github" target="_blank"
+                    rel="noopener noreferrer">GitHub</a>
+                  <a href="https://www.linkedin.com/in/jullia-akutagawa?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+                    class="botao-linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                </div>
+              </div>
+            </div>
 
           </div>
-        </div>
+        </main>
       </div>
 
-      <!-- Card 2 -->
-      <div class="cartao-desenvolvedor">
-        <div class="imagem-desenvolvedor">
-          <img src="/src/assets/img/Jullia.png" alt="Foto do Desenvolvedor 2">
-        </div>
-        <div class="conteudo-desenvolvedor">
-          <h3>Jullia Akutagawa</h3>
-          <p>Sou aluna da Fatec Garça e também estou no 4º termo do curso de Análise e Desenvolvimento de Sistemas. 
-            Tenho grande interesse pela área de tecnologia e busco constantemente aprender novas ferramentas e conceitos 
-            que possam contribuir para o desenvolvimento de soluções inovadoras. Desenvolvedora Back-end, especialista em APIs, 
-            segurança e banco de dados, garantindo performance e confiabilidade.</p>
-          <div class="botoes-desenvolvedor">
-            <a href="https://github.com/JulliaAtsumi" class="botao-github" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://www.linkedin.com/in/jullia-akutagawa?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" class="botao-linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <div class="footer-left">
+            <p>© Fidelizi • Segurança em Dispositivos IoT.</p>
+          </div>
+          <div class="footer-right">
+            <nav class="footer-nav">
+              <a href="index.html">Início</a>
+              <a href="testes.html">Testes</a>
+              <a href="relatorios.html">Relatórios</a>
+              <a href="quem_somos.html">Quem Somos</a>
+            </nav>
           </div>
         </div>
-      </div>
-
+        <div class="container footer-team">
+          <div class="footer-team">
+            <p>Desenvolvido por<a href="team_dev.html">Jullia Akutagawa</a> e<a href="team_dev.html">Mª Eduarda Leão</a>
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
-  </main>
+  </div>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-left">
-        <p>© Fidelizi • Segurança em Dispositivos IoT.</p>
-      </div>
-      <div class="footer-right">
-        <nav class="footer-nav">
-          <a href="index.html">Início</a>
-          <a href="testes.html">Testes</a>
-          <a href="relatorios.html">Relatórios</a>
-          <a href="quem_somos.html">Quem Somos</a>
-        </nav>
-      </div>
-    </div>
-    <div class="container   footer-team">
-      <div class="footer-team">
-        <p>Desenvolvido por<a href="team_dev.html">Jullia Akutagawa</a>  e<a href="team_dev.html">Mª Eduarda Leão</a></p>
-      </div>
-    </div>
-  </footer>
-
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  
+  <!-- Configuração do Firebase -->
+  <script src="js/firebase/firebase-config.js"></script>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Funcionalidades Comuns Usuário -->
+  <script src="js/user-common.js"></script>
+  <script src="js/team_dev.js"></script>
 </body>
+
 </html>

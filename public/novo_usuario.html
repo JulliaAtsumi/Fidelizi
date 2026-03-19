@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Fidelizi - Novo Usuário</title>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <!-- jsPDF para exportação -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <link rel="icon" href="/src/assets/img/favicon.png" type="image/png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+    <link rel="stylesheet" href="/src/assets/styles/style.css" />
+    <link rel="stylesheet" href="/src/assets/styles/admin_dashboard.css">
+    <style>
+        .hidden {
+            display: none !important;
+        }
+
+        .crud-container {
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(28,44,70,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .type-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .type-option {
+            flex: 1;
+            padding: 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .type-option:hover {
+            border-color: #3b82f6;
+        }
+
+        .type-option.active {
+            border-color: #1e3a8a;
+            background: #f8fafc;
+        }
+
+        .type-option i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #6b7280;
+        }
+
+        .type-option.active i {
+            color: #1e3a8a;
+        }
+
+        .is-invalid {
+            border-color: #ef4444 !important;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .section-title {
+            color: #1e3a8a;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .btn-login {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        .btn-login:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+        .admin-badge {
+            background: #7ee787;
+            color: #0d1117;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Admin Padronizado -->
+        <aside class="sidebar" id="sidebar" style="transform: translateX(0);">
+            <div class="sidebar-header">
+                <img src="/src/assets/img/logo_horizontal_ModoEscuro.png" alt="Fidelizi" class="sidebar-logo">
+                <div class="admin-badge"><i class="fas fa-shield-alt me-2"></i>ADMIN</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-item">
+                    <a href="admin_dashboard.html" class="nav-link" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="#admin-cadastros-submenu" class="nav-link active" data-bs-toggle="collapse" aria-expanded="true">
+                        <i class="fas fa-database"></i>
+                        <span>Cadastros</span>
+                        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="collapse submenu show" id="admin-cadastros-submenu">
+                        <a href="gerenciar_usuarios.html" class="nav-link" data-page="usuarios">Gerenciar Usuários</a>
+                        <a href="novo_usuario.html" class="nav-link active" data-page="novo-usuario">Novo Usuário</a>
+                    </div>
+                </div>
+
+                <div class="nav-item">
+                    <a href="#admin-testes-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-vial"></i>
+                        <span>Testes</span>
+                        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="collapse submenu" id="admin-testes-submenu">
+                        <a href="admin_teste.html" class="nav-link" data-page="testes">Gerenciar Testes</a>
+                    </div>
+                </div>
+
+                <div class="nav-item">
+                    <a href="relatorios.html" class="nav-link" data-page="relatorios">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Relatórios</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="#admin-config-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="collapse submenu" id="admin-config-submenu">
+                        <a href="#" class="nav-link" id="dark-mode-toggle">
+                            <i class="fas fa-moon"></i>
+                            <span>Modo Escuro</span>
+                        </a>
+                        <a href="#" class="nav-link" onclick="alert('Página em desenvolvimento')">
+                            <i class="fas fa-user"></i>
+                            <span>Meu Perfil</span>
+                        </a>
+                        <a href="#" class="nav-link" onclick="alert('Página em desenvolvimento')">
+                            <i class="fas fa-sliders-h"></i>
+                            <span>Configurações do Sistema</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-item">
+                    <a href="index.html" class="nav-link" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content" id="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="header-center">
+                    <img src="/src/assets/img/logo_horizontal.png" alt="Fidelizi" class="header-logo">
+                    <span class="admin-badge ms-2">NOVO USUÁRIO</span>
+                </div>
+
+                <div class="search-container">
+                    <input type="text" id="global-search" placeholder="Buscar no sistema..." />
+                    <button onclick="performGlobalSearch(document.getElementById('global-search').value)" 
+                            style="background: none; border: none; color: #1e3a8a; cursor: pointer;">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="crud-container">
+                <!-- Alert Messages -->
+                <div id="alert-message" class="alert hidden"></div>
+
+                <!-- Form Section -->
+                <div class="form-section">
+                    <h3 class="section-title" id="form-title">
+                        <i class="fas fa-user-plus me-2"></i>Novo Usuário
+                    </h3>
+
+                    <form id="user-form">
+                        <input type="hidden" id="user-id" value="">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="user-type" class="form-label">Tipo de Usuário *</label>
+                                    <select class="form-select" id="user-type" required onchange="toggleFields()">
+                                        <option value="">Selecione o tipo...</option>
+                                        <option value="pf" selected>Pessoa Física</option>
+                                        <option value="pj">Pessoa Jurídica</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="user-perfil" class="form-label">Perfil *</label>
+                                    <select class="form-select" id="user-perfil" required>
+                                        <option value="usuario" selected>Usuário</option>
+                                        <option value="admin">Administrador</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="user-email" class="form-label">E-mail *</label>
+                                    <input type="email" class="form-control" id="user-email"
+                                        placeholder="usuario@exemplo.com" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="user-password" class="form-label">Senha *</label>
+                                    <input type="password" class="form-control" id="user-password"
+                                        placeholder="Mínimo 6 caracteres" minlength="6" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Campos Pessoa Física -->
+                        <div id="pf-fields">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="user-name" class="form-label">Nome Completo *</label>
+                                        <input type="text" class="form-control" id="user-name"
+                                            placeholder="João Silva Santos" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="user-cpf" class="form-label">CPF</label>
+                                        <input type="text" class="form-control" id="user-cpf"
+                                            placeholder="000.000.000-00" maxlength="14">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Campos Pessoa Jurídica -->
+                        <div id="pj-fields" class="hidden">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="company-name" class="form-label">Razão Social *</label>
+                                        <input type="text" class="form-control" id="company-name"
+                                            placeholder="Empresa Ltda">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="company-cnpj" class="form-label">CNPJ</label>
+                                        <input type="text" class="form-control" id="company-cnpj"
+                                            placeholder="00.000.000/0000-00" maxlength="18">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="company-contact" class="form-label">Nome do Contato</label>
+                                        <input type="text" class="form-control" id="company-contact"
+                                            placeholder="Nome da pessoa responsável">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="company-phone" class="form-label">Telefone</label>
+                                        <input type="text" class="form-control" id="company-phone"
+                                            placeholder="(11) 99999-9999" maxlength="15">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Salvar Usuário
+                            </button>
+                            <button type="button" class="btn btn-login" onclick="goToLogin()">
+                                <i class="fas fa-sign-in-alt me-2"></i>Fazer Login
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelForm()">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
+    <!-- Configuração do Firebase -->
+    <script src="js/firebase/firebase-config.js"></script>
+    <script src="js/firebase/firebase-services.js"></script>
+    <script src="js/auth/auth.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Funcionalidades Comuns Admin -->
+    <script src="js/admin-common.js"></script>
+    <script src="js/novo_usuario.js"></script>
+    
+    <script>
+        // Atualizar item ativo do menu
+        document.addEventListener('DOMContentLoaded', function() {
+            updateActiveMenuItem('novo-usuario');
+            // Expandir submenu de cadastros
+            const submenu = document.getElementById('admin-cadastros-submenu');
+            if (submenu) {
+                submenu.classList.add('show');
+                const parentNav = submenu.previousElementSibling;
+                if (parentNav) {
+                    parentNav.setAttribute('aria-expanded', 'true');
+                }
+            }
+        });
+    </script>
+    <script>
+        // Função para selecionar tipo via botões visuais
+        function selectType(type) {
+            document.getElementById('user-type').value = type;
+            toggleFields();
+
+            // Atualizar estilos dos botões
+            document.querySelectorAll('.type-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        // Função para cancelar e voltar
+        function cancelForm() {
+            if (confirm('Deseja cancelar a operação? As alterações não salvas serão perdidas.')) {
+                window.location.href = 'gerenciar_usuarios.html';
+            }
+        }
+
+        // Função para ir para a página de login
+        function goToLogin() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+.crud-container {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(28, 44, 70, 0.08);
+    margin-bottom: 2rem;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #eef6ff;
+}
+
+.photo-upload {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.photo-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #eef6ff;
+    margin-bottom: 1rem;
+}
+
+.photo-placeholder {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: #f8fbff;
+    border: 3px dashed #e6eef8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+    color: #7b8a9a;
+    cursor: pointer;
+}
+
+.grid-container {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(28, 44, 70, 0.08);
+}
+
+.table-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.btn-edit {
+    background: #eef6ff;
+    color: #1e3a8a;
+}
+
+.btn-delete {
+    background: #ffe8e8;
+    color: #d93025;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8fbff;
+    border-top: 1px solid #eef6ff;
+}
+
+.records-per-page {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-container {
+    margin-bottom: 1.5rem;
+}
+
+.user-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.photo-placeholder-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f8fbff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7b8a9a;
+    font-size: 0.8rem;
+}

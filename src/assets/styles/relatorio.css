@@ -1,0 +1,208 @@
+/* Estilos específicos para a página de relatórios */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.metric-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(28, 44, 70, 0.08);
+    text-align: center;
+    border-left: 5px solid #1e3a8a;
+}
+
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 0.5rem;
+}
+
+.metric-label {
+    color: #475b72;
+    font-size: 0.9rem;
+}
+
+.status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-completed {
+    background: #e6f7ee;
+    color: #07924a;
+}
+
+.status-in-progress {
+    background: #fff4e8;
+    color: #b45b00;
+}
+
+.status-pending {
+    background: #eef6ff;
+    color: #1e3a8a;
+}
+
+.status-failed {
+    background: #ffe8e8;
+    color: #d93025;
+}
+
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(28, 44, 70, 0.08);
+}
+
+.reports-table th,
+.reports-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eef6ff;
+}
+
+.reports-table th {
+    background: #f8fbff;
+    color: #1e3a8a;
+    font-weight: 600;
+}
+
+.reports-table tr:hover {
+    background: #f8fbff;
+}
+
+.chart-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(28, 44, 70, 0.08);
+    margin-bottom: 2rem;
+}
+
+.chart-placeholder {
+    height: 300px;
+    background: linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7b8a9a;
+    font-size: 1.1rem;
+}
+
+.insight-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(28, 44, 70, 0.08);
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #4fbb54;
+}
+
+.insight-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.insight-icon {
+    width: 40px;
+    height: 40px;
+    background: #e6f7ee;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: #07924a;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.filter-select {
+    padding: 0.6rem 1rem;
+    border: 1px solid #e6eef8;
+    border-radius: 8px;
+    background: white;
+    color: #2b3b57;
+}
+
+.export-btn {
+    background: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s ease;
+}
+
+.export-btn:hover {
+    background: #152c6e;
+}
+
+.severity-high {
+    color: #d93025;
+    font-weight: 600;
+}
+
+.severity-medium {
+    color: #f9a825;
+    font-weight: 600;
+}
+
+.severity-low {
+    color: #07924a;
+    font-weight: 600;
+}
+
+.action-btn {
+    background: none;
+    border: 1px solid #e6eef8;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #1e3a8a;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background: #eef6ff;
+    border-color: #1e3a8a;
+}
+
+@media (max-width: 768px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reports-table {
+        font-size: 0.9rem;
+    }
+
+    .reports-table th,
+    .reports-table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .filter-bar {
+        flex-direction: column;
+    }
+}

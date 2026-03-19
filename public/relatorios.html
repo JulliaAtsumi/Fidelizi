@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fidelizi — Relatórios</title>
+  <link rel="icon" href="/src/assets/img/favicon.png" type="image/png">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <!-- jsPDF para exportação -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link rel="stylesheet" href="/src/assets/styles/style.css" />
+  <link rel="stylesheet" href="/src/assets/styles/relatorio.css">
+</head>
+
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar (Admin ou Usuário) -->
+    <aside class="sidebar collapsed" id="sidebar">
+      <div class="sidebar-header">
+        <img src="/src/assets/img/logo_horizontal_ModoEscuro.png" alt="Fidelizi" class="sidebar-logo">
+      </div>
+
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <!-- Conteúdo será inserido dinamicamente baseado no perfil -->
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <button class="menu-toggle" id="menu-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="header-center">
+          <img src="/src/assets/img/logo_horizontal.png" alt="Fidelizi" class="header-logo">
+          <span class="admin-badge ms-2" id="header-badge" style="display: none;">RELATÓRIOS</span>
+        </div>
+
+        <div class="search-container">
+          <input type="text" id="search" placeholder="Buscar no site..." />
+          <button onclick="buscar()"><i class="fas fa-search"></i></button>
+        </div>
+      </header>
+
+      <div class="main-content-inner">
+        <main class="container">
+          <div id="alert-message" class="alert hidden"></div>
+          <h2 class="section-title">Relatórios e Insights</h2>
+          <p class="mb-4">Acompanhe o status dos testes, métricas de segurança e insights sobre seus dispositivos IoT.
+          </p>
+
+          <!-- Filtros e Exportação -->
+          <div class="filter-bar">
+            <select class="filter-select" id="filter-status">
+              <option value="">Todos os status</option>
+              <option value="concluido">Concluídos</option>
+              <option value="andamento">Em andamento</option>
+              <option value="pendente">Pendentes</option>
+              <option value="falha">Com falha</option>
+            </select>
+
+            <select class="filter-select" id="filter-device">
+              <option value="">Todos os dispositivos</option>
+              <option value="ESP32-CAM">ESP32-CAM</option>
+              <option value="Raspberry Pi Zero W">Raspberry Pi Zero W</option>
+              <option value="DHT22">Sensor DHT22</option>
+            </select>
+
+            <select class="filter-select" id="filter-date">
+              <option value="">Todo o período</option>
+              <option value="7">Últimos 7 dias</option>
+              <option value="30">Últimos 30 dias</option>
+              <option value="90">Últimos 3 meses</option>
+            </select>
+
+            <button class="export-btn" onclick="exportarRelatorios()">
+              <i class="fas fa-download"></i>
+              Exportar Relatório
+            </button>
+          </div>
+
+          <!-- Métricas Principais -->
+          <section class="metrics-section">
+            <h3 class="section-title">Visão Geral</h3>
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-value" id="metric-total">0</div>
+                <div class="metric-label">Testes Realizados</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value" id="metric-success">0%</div>
+                <div class="metric-label">Taxa de Sucesso</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value" id="metric-critical">0</div>
+                <div class="metric-label">Vulnerabilidades Críticas</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value" id="metric-safe">0%</div>
+                <div class="metric-label">Dispositivos Seguros</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Gráficos -->
+          <section class="charts-section">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="chart-container">
+                  <h4>Status dos Testes</h4>
+                  <div class="chart-placeholder">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    Gráfico de Pizza - Distribuição de Status
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="chart-container">
+                  <h4>Vulnerabilidades por Tipo</h4>
+                  <div class="chart-placeholder">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Gráfico de Barras - Tipos de Vulnerabilidade
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Insights -->
+          <section class="insights-section">
+            <h3 class="section-title">Insights e Recomendações</h3>
+
+            <div class="insight-card">
+              <div class="insight-header">
+                <div class="insight-icon">
+                  <i class="fas fa-shield-alt"></i>
+                </div>
+                <h4>Segurança de Firmware</h4>
+              </div>
+              <p>67% dos dispositivos ESP32-CAM apresentam firmware desatualizado. Recomendamos atualização imediata
+                para a versão 2.0.1 para corrigir vulnerabilidades críticas.</p>
+            </div>
+
+            <div class="insight-card">
+              <div class="insight-header">
+                <div class="insight-icon">
+                  <i class="fas fa-network-wired"></i>
+                </div>
+                <h4>Configuração de Rede</h4>
+              </div>
+              <p>3 dispositivos Raspberry Pi estão com portas SSH abertas para a internet. Recomendamos implementar VPN
+                ou restringir acesso por IP.</p>
+            </div>
+
+            <div class="insight-card">
+              <div class="insight-header">
+                <div class="insight-icon">
+                  <i class="fas fa-database"></i>
+                </div>
+                <h4>Proteção de Dados</h4>
+              </div>
+              <p>Sensores DHT22 estão transmitindo dados sem criptografia. Sugerimos implementar TLS para proteger dados
+                sensoriais em trânsito.</p>
+            </div>
+          </section>
+
+          <!-- Tabela de Relatórios -->
+          <section class="reports-section">
+            <h3 class="section-title">Relatórios Detalhados</h3>
+
+            <div class="table-responsive">
+              <table class="reports-table">
+                <thead>
+                  <tr>
+                    <th>Nome do Teste</th>
+                    <th>Dispositivo</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th>Vulnerabilidades</th>
+                    <th>Severidade</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="reports-table-body">
+                  <!-- Dados serão carregados via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <div class="footer-left">
+            <p>© Fidelizi • Segurança em Dispositivos IoT.</p>
+          </div>
+          <div class="footer-right">
+            <nav class="footer-nav">
+              <a href="index.html">Início</a>
+              <a href="dispositivos.html">Dispositivo</a>
+              <a href="testes.html">Testes</a>
+              <a href="quem_somos.html">Quem Somos</a>
+            </nav>
+          </div>
+        </div>
+        <div class="container footer-team">
+          <div class="footer-team">
+            <p>Desenvolvido por<a href="team_dev.html">Jullia Akutagawa</a> e<a href="team_dev.html">Mª Eduarda Leão</a>
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Configuração do Firebase -->
+  <script src="js/firebase/firebase-config.js"></script>
+  <script src="js/firebase/firebase-services.js"></script>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Scripts de relatórios e navegação -->
+  <script src="js/relatorio.js"></script>
+  
+  <script>
+    // Carregar sidebar baseado no perfil
+    document.addEventListener('DOMContentLoaded', function() {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const sidebarNav = document.getElementById('sidebar-nav');
+        const headerBadge = document.getElementById('header-badge');
+        
+        // Atualizar badge do header
+        if (headerBadge && user.perfil === 'admin') {
+            headerBadge.style.display = 'inline-block';
+        }
+        
+        if (user.perfil === 'admin') {
+            // Sidebar admin padronizado
+            sidebarNav.innerHTML = `
+                <div class="nav-item">
+                    <a href="admin_dashboard.html" class="nav-link" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#admin-cadastros-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-database"></i>
+                        <span>Cadastros</span>
+                        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="collapse submenu" id="admin-cadastros-submenu">
+                        <a href="gerenciar_usuarios.html" class="nav-link" data-page="usuarios">Gerenciar Usuários</a>
+                        <a href="novo_usuario.html" class="nav-link" data-page="novo-usuario">Novo Usuário</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="#admin-testes-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-vial"></i>
+                        <span>Testes</span>
+                        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="collapse submenu" id="admin-testes-submenu">
+                        <a href="admin_teste.html" class="nav-link" data-page="testes">Gerenciar Testes</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="relatorios.html" class="nav-link active" data-page="relatorios">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Relatórios</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#admin-config-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="collapse submenu" id="admin-config-submenu">
+                        <a href="#" class="nav-link" id="dark-mode-toggle">
+                            <i class="fas fa-moon"></i>
+                            <span>Modo Escuro</span>
+                        </a>
+                        <a href="#" class="nav-link" onclick="alert('Página em desenvolvimento')">
+                            <i class="fas fa-user"></i>
+                            <span>Meu Perfil</span>
+                        </a>
+                        <a href="#" class="nav-link" onclick="alert('Página em desenvolvimento')">
+                            <i class="fas fa-sliders-h"></i>
+                            <span>Configurações do Sistema</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="index.html" class="nav-link" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </a>
+                </div>
+            `;
+            
+            // Carregar admin-common.js
+            const adminScript = document.createElement('script');
+            adminScript.src = 'js/admin-common.js';
+            adminScript.onload = function() {
+                if (typeof checkAdminAccess === 'function' && checkAdminAccess()) {
+                    if (typeof initAdminLogout === 'function') initAdminLogout();
+                    if (typeof initDarkMode === 'function') initDarkMode();
+                    if (typeof initSidebarToggle === 'function') initSidebarToggle();
+                    if (typeof initGlobalSearch === 'function') initGlobalSearch();
+                }
+            };
+            document.body.appendChild(adminScript);
+        } else {
+            // Sidebar usuário
+            sidebarNav.innerHTML = `
+                <div class="nav-item">
+                    <a href="home.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>Início</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#servicos-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-cogs"></i>
+                        <span>Serviços</span>
+                        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="collapse submenu" id="servicos-submenu">
+                        <a href="dispositivos.html" class="nav-link">Dispositivos</a>
+                        <a href="testes.html" class="nav-link">Testes</a>
+                        <a href="relatorios.html" class="nav-link active">Relatórios</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="quem_somos.html" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Quem Somos</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#config-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                    <div class="collapse submenu" id="config-submenu">
+                        <a href="#" class="nav-link" id="dark-mode-toggle">
+                            <i class="fas fa-moon"></i>
+                            <span>Modo Escuro</span>
+                        </a>
+                        <a href="perfil.html" class="nav-link">
+                            <i class="fas fa-user"></i>
+                            <span>Meu Perfil</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="index.html" class="nav-link" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </a>
+                </div>
+            `;
+            
+            // Carregar user-common.js
+            const userScript = document.createElement('script');
+            userScript.src = 'js/user-common.js';
+            userScript.onload = function() {
+                if (typeof checkUserAuth === 'function' && checkUserAuth()) {
+                    if (typeof initUserLogout === 'function') initUserLogout();
+                    if (typeof initUserDarkMode === 'function') initUserDarkMode();
+                    if (typeof initUserSidebarToggle === 'function') initUserSidebarToggle();
+                    if (typeof initUserGlobalSearch === 'function') initUserGlobalSearch();
+                }
+            };
+            document.body.appendChild(userScript);
+        }
+    });
+  </script>
+</body>
+
+</html>

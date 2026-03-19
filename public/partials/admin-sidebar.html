@@ -1,0 +1,75 @@
+<!-- Sidebar Administrativo Padronizado -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <img src="/src/assets/img/logo_horizontal_ModoEscuro.png" alt="Fidelizi" class="sidebar-logo">
+    <div class="admin-badge"><i class="fas fa-shield-alt me-2"></i>ADMIN</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-item">
+      <a href="admin_dashboard.html" class="nav-link" data-page="dashboard">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+    </div>
+
+    <div class="nav-item">
+      <a href="#admin-cadastros-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+        <i class="fas fa-database"></i>
+        <span>Cadastros</span>
+        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <div class="collapse submenu" id="admin-cadastros-submenu">
+        <a href="gerenciar_usuarios.html" class="nav-link" data-page="usuarios">Gerenciar Usuários</a>
+        <a href="novo_usuario.html" class="nav-link" data-page="novo-usuario">Novo Usuário</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <a href="#admin-testes-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+        <i class="fas fa-vial"></i>
+        <span>Testes</span>
+        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <div class="collapse submenu" id="admin-testes-submenu">
+        <a href="admin_teste.html" class="nav-link" data-page="testes">Gerenciar Testes</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <a href="relatorios.html" class="nav-link" data-page="relatorios">
+        <i class="fas fa-chart-bar"></i>
+        <span>Relatórios</span>
+      </a>
+    </div>
+
+    <div class="nav-item">
+      <a href="#admin-config-submenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="false">
+        <i class="fas fa-cog"></i>
+        <span>Configurações</span>
+        <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <div class="collapse submenu" id="admin-config-submenu">
+        <a href="#" class="nav-link" id="dark-mode-toggle">
+          <i class="fas fa-moon"></i>
+          <span>Modo Escuro</span>
+        </a>
+        <a href="#" class="nav-link" onclick="alert('Página em desenvolvimento')">
+          <i class="fas fa-user"></i>
+          <span>Meu Perfil</span>
+        </a>
+        <a href="#" class="nav-link" onclick="alert('Página em desenvolvimento')">
+          <i class="fas fa-sliders-h"></i>
+          <span>Configurações do Sistema</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <a href="index.html" class="nav-link" id="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Sair</span>
+      </a>
+    </div>
+  </nav>
+</aside>

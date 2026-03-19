@@ -41,7 +41,8 @@
 }
 
 .botao-principal, .botao-principal:visited {
-    background: linear-gradient(90deg,#1e3a8a,#3fa0fc);
+    background: linear-gradient(90deg,#1e3a8a,#4fbb54);
+    border: none;
     color:white;
     padding: .6rem 1rem;
     border-radius:8px;

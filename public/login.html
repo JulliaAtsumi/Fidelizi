@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Fidelizi — Início</title>
   <link rel="icon" href="/src/assets/img/favicon.png" type="image/png">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <!-- jsPDF para exportação -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -16,22 +25,24 @@
   <link rel="stylesheet" href="/src/assets/styles/style.css">
   <link rel="stylesheet" href="/src/assets/styles/login_cadas.css">
 </head>
+
 <body>
 
   <main class="tela-login">
     <div class="caixa-login">
       <h2>Acessar o Sistema</h2>
-      <form>
-        <input type="email" id="email" placeholder="E-mail" required>
-        <input type="password" id="password" placeholder="Senha" required>
+      <form method="post">
+        <input type="email" id="email" placeholder="E-mail" name="email" required>
+        <input type="password" id="password" placeholder="Senha" name="password" required>
         <div class="text-center">
           <a href="recup_senha.html" class="text-decoration-none">Esqueceu a senha?</a>
         </div>
-        <button type="submit" class="botao-principal">Entrar</button>
+        <button type="submit" class="botao-principal" onclick="return Login()">Entrar</button>
       </form>
 
       <div class="text-center">
-        <p class="mb-0" id="crie-conta">Novo por aqui? <a href="cadastro.html" class="text-decoration-none">Crie uma conta</a></p>
+        <p class="mb-0" id="crie-conta">Novo por aqui? <a href="cadastro/cadastro.html"
+            class="text-decoration-none">Crie uma conta</a></p>
       </div>
     </div>
   </main>
@@ -54,11 +65,15 @@
 
     <div class="container   footer-team">
       <div class="footer-team">
-        <p>Desenvolvido por<a href="team_dev.html">Jullia Akutagawa</a>  e<a href="team_dev.html">Mª Eduarda Leão</a></p>
+        <p>Desenvolvido por<a href="team_dev.html">Jullia Akutagawa</a> e<a href="team_dev.html">Mª Eduarda Leão</a></p>
       </div>
     </div>
 
   </footer>
+  
+  <!-- Configuração do Firebase -->
+  <script src="js/firebase/firebase-config.js"></script>
   <script src="js/login.js"></script>
 </body>
+
 </html>
